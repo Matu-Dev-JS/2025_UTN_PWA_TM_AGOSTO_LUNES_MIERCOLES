@@ -1,7 +1,11 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Title from '../../Components/Title/Title'
+import { ProductContext } from '../../Context/ProductContext'
+import { Link, useNavigate } from 'react-router'
 
 const CreateProductScreen = () => {
+    const {addNewProduct} = useContext(ProductContext)
+    const navigate = useNavigate()
     const initial_state_form = {
         title: 'Hola',
         price: '',
@@ -15,19 +19,46 @@ const CreateProductScreen = () => {
         const {target} = event
         const {name, value} = target
         setFormState(
-            (prev_form_state) =>{
-                return {...prev_form_state, [name]: value}
+            (current_form_state) =>{
+                return {...current_form_state, [name]: value}
             }
         )
     }
-    console.log(form_state)
+    
+
+    const onSubmit = (event) => {
+        event.preventDefault()
+        addNewProduct(form_state)
+        setFormState(initial_state_form)
+        alert("producto cargado con exito")
+        navigate('/')
+    }
+
+    /* 
+    const [counter, setCounter] = useState(1)
+
+    const incrementCounter = () => {
+        setCounter(
+            (prev_counter) => prev_counter + 1
+        )
+        setCounter(
+            (prev_counter) => prev_counter + 1
+        )
+        setCounter(
+            (prev_counter) => prev_counter + 1
+        )
+    } */
   
     return (
         <div>
+            {/* <span>{counter}</span>
+            <button onClick={incrementCounter}>+</button>
+ */}
+            <Link to={'/'}>Volver</Link>
             <Title heading={'h1'}>
                 Carga el producto al sistema
             </Title>
-            <form>
+            <form onSubmit={onSubmit}>
                 <div>
                     <label htmlFor="title">Titulo:</label>
                     <input 

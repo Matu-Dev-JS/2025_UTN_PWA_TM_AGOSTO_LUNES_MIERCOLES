@@ -1,37 +1,18 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Title from '../../Components/Title/Title'
 import ProductList from '../../Components/ProductList/ProductList'
+import { ProductContext } from '../../Context/ProductContext'
+import { Link } from 'react-router'
 
 
 
 function HomeScreen() {
 
-    const products = [
-        {
-            title: 'Tv samsung 32"',
-            id: 1,
-            price: 200,
-            descripcion: 'Tv muy buena',
-            stock: 3
-        },
-        {
-            title: 'Tv samsung 42"',
-            id: 2,
-            price: 300,
-            descripcion: 'Tv muy buena',
-            stock: 2
-        },
-        {
-            title: 'Tv samsung 52"',
-            id: 3,
-            price: 400,
-            descripcion: 'Tv muy buena',
-            stock: 1
-        }
-    ]
+    const {products} = useContext(ProductContext)
 
     return (
         <div>
+            
             <Title heading='h1' >
                 Hola <span style={{ color: 'blue' }}>mundo</span>
             </Title>
@@ -39,7 +20,9 @@ function HomeScreen() {
             <Title heading='h2' >
                 Hola <span style={{ color: 'blue' }}>mundo</span>
             </Title>
-
+            <Link to={'/create'}>
+                Crear producto
+            </Link>
             <ProductList products={products} />
         </div>
     )

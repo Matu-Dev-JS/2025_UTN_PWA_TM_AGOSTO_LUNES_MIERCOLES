@@ -8,7 +8,7 @@ const ProductList = ({ products }) => {
                 ? <p>No hay productos cargados</p>
                 : products.map(
                     (product) => {
-                        return <ProductItem {...product}/>
+                        return <ProductItem {...product} key={product.id}/>
                     }
                 )
             }
@@ -18,7 +18,7 @@ const ProductList = ({ products }) => {
 
 const ProductItem = ({title, price, stock, id}) => {
     return (
-        <div key={id} className="product_container">
+        <div className="product_container">
             <h2>{title}</h2>
             <p>Precio: ${price}</p>
             <p>Stock: {stock}</p>

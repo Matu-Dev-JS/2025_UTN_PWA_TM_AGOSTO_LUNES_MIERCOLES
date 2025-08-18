@@ -3,7 +3,6 @@
 - Componentes
 - Props
 - Estados
-- Efectos
 - React Router (Declarativo o basado en objetos)
 - CustomHooks
-
+- Efectos

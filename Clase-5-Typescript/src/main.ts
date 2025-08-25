@@ -88,7 +88,7 @@ class Item {
 		this.id = id
 		this.descripcion = descripcion
 	}
-	getNombre(){
+	getNombre() {
 		return this.nombre
 	}
 	mostrarItem(): void {
@@ -99,6 +99,7 @@ class Item {
 class ItemTienda extends Item {
 	stock: number
 	margen_ganacia: number
+
 	constructor(
 		nombre: string,
 		precio: number,
@@ -110,6 +111,16 @@ class ItemTienda extends Item {
 		super(nombre, precio, id, descripcion)
 		this.stock = stock
 		this.margen_ganacia = margen_ganacia
+	}
+	/* 
+	Ejemplo de polimorfismo:
+	Tapando el funcionamiento de mostrarItem para cambiar el comportamiento de este metodo en ItemTienda 
+	Siempre asegurarse de cumplir los mismos contratos (mismos parametros y mismo retorno)
+	*/
+	mostrarItem(): void {
+		console.log(
+			this.nombre + " es " + this.descripcion + " y cuesta $" + this.precio + "rupias" + ' su margen de ganancia es $' + this.margen_ganacia
+		)
 	}
 	setStock(nuevo_stock: number): void {
 		this.stock = nuevo_stock
@@ -134,21 +145,41 @@ Crear la class Tienda
 		-eliminarPorId(item_id): boolean
 			-Eliminar el item con el id recibido y devolver un boolean de status (si la operacion se realizo o no)
 
+			-findIndex + splice
+				posicion = items.findIndex(item => item.id === id) (posicion | -1)
+				items.splice(posicion, 1)
+			-filter
+				let se_encontro = false
+				items = items.filter(item => {
+					if(item.id !== id){
+						return true
+					}else{
+						se_encontro = true
+						return false
+					}
+				})
+
+			const itemsMayoresA100 = items.filter(item => item.precio > 100)
+
+
 		-modificarStockItem(item : ItemTienda, cantidad)
 			-checkear que la cantidad a decrementar sea menor o igual que el stock del item con el id buscado
 			-Si es menor decrementar el stock del item utilizando setStock
-			item = this.buscarItemPorId(id)
-			if(item.stock >= cantidad_decrementar){
-				item.setStock(item.setStock - cantidad)
-			}
+			-Devolver un boolean de status
+			-EJEMPLO DE USO
+				item = this.buscarItemPorId(id)
+				this.modificarStockItem(item, 3)
+	
 		
 		-vender(id_item_a_vender cantidad_vendida) 
 			-Buscar el item en la lista de items, si existe lo va a decrementar usando modificarStockItem y incrementara su cantidad de dinero por la (cantidad_vendida * precio * margen_ganancia)
 			-Si no hay item con ese id lanzar mensaje de error "Producto no encontrado"
-			-Si el stock del item es 0 lanzar mensaje de error "Producto agotado"
+			-Si el item no se puede vender por falta de stock lanzar mensaje de error "No hay stock suficiente"
   
 
 */
+
+
 
 class Tienda {
 	nombre: string
@@ -160,6 +191,11 @@ class Tienda {
 		this.id = id
 		this.cantidad_dinero_en_cuenta = cantidad_dinero_en_cuenta
 	}
+	/**
+	 * Busca un item por su id en la lista de items de la tienda.
+	 * @param id El id del item a buscar
+	 * @returns El item encontrado, o null si no se encontro
+	 */
 	buscarItemPorId(id: number): ItemTienda | null {
 
 		//Version con .find
@@ -190,27 +226,64 @@ class Tienda {
 			-gastarDineroEnCuenta(dinero_gastado) y decremente el dinero en cuenta
 			-puedoRealizarCompra(Item, cantidad_comprada): {total //total de la compra: number, puede_comprar: boolean} //devolver para definir si se puede o no comprar
 		*/
-        const gastoDeCompra: number = cantidad * nuevo_item.precio;
-        if (gastoDeCompra > this.cantidad_dinero_en_cuenta) {
-            alert('la compra no se puede realizar')
+		const gastoDeCompra: number = cantidad * nuevo_item.precio;
+		if (gastoDeCompra > this.cantidad_dinero_en_cuenta) {
+			alert('la compra no se puede realizar')
 			return //Cortar la funcion en caso de fallo
-        }
-        this.agregarItem(item, cantidad, margen_ganancia)
-        this.cantidad_dinero_en_cuenta -= gastoDeCompra;
-    }
-
-	agregarItem(nuevo_item: Item, cantidad: number, margen_ganancia: number){
-		const itemEnTienda = new ItemTienda(
-            nuevo_item.nombre,
-            nuevo_item.precio,
-            nuevo_item.id,
-            nuevo_item.descripcion,
-            cantidad,
-            margen_ganancia
-        );
-        this.items.push(itemEnTienda);
+		}
+		this.agregarItem(item, cantidad, margen_ganancia)
+		this.cantidad_dinero_en_cuenta -= gastoDeCompra;
 	}
 
+	agregarItem(nuevo_item: Item, cantidad: number, margen_ganancia: number) {
+		const itemEnTienda = new ItemTienda(
+			nuevo_item.nombre,
+			nuevo_item.precio,
+			nuevo_item.id,
+			nuevo_item.descripcion,
+			cantidad,
+			margen_ganancia
+		);
+		this.items.push(itemEnTienda);
+	}
+
+
+	eliminarItemId(item_id: number): boolean {
+		const index : number = this.items.findIndex(item => item.id === item_id);
+		if (index !== -1) {
+			this.items.splice(index, 1);
+			return true; 
+		}
+		return false; 
+	}
+	modificarStockItem(item: ItemTienda, cantidad: number): boolean {
+		if (cantidad <= item.stock) {
+			item.setStock(item.stock - cantidad);
+			return true
+		} else {
+			return false
+		}
+  	}
+ 
+	vender(id_item_a_vender: number, cantidad_vendida: number){
+		const item_a_vender = this.buscarItemPorId(id_item_a_vender)
+		if(!item_a_vender){
+			//Lanzar error
+			return 
+		}
+		const realizo_venta = this.modificarStockItem(item_a_vender, cantidad_vendida)
+		if(!realizo_venta){
+			//Lanzar error
+			return 
+		}
+		const total_venta = (item_a_vender.precio * ((item_a_vender.margen_ganacia / 100) + 1)) * cantidad_vendida
+		this.cantidad_dinero_en_cuenta = this.cantidad_dinero_en_cuenta + total_venta
+	}
+
+
+
+
+	
 
 }
 const item = new ItemTienda('Agua', 10, 1, 'Bebible', 10, 10)
@@ -221,3 +294,31 @@ tienda.items.push(item2)
 
 
 const papa_fritas = new Item('papa fritas', 3000, 1, 'Papas fritas...')
+
+
+
+/* Proveedores */
+
+/* 
+ItemProveedor extends de Item
+	-id
+	-nombre
+	-precio
+	-descripcion
+	-id_proveedor => esta es la propiedad nueva
+
+Proveedor
+	-items: ItemProveedor[]
+	-nombre
+	-direccion
+	-fecha_creacion: Date
+	-id
+	Metodos:
+	 	-buscarItemPorId (item_id) Devolver el producto encontrado o null
+		-registrarItem(nombre, precio, id, descripcion) Crear el ItemProveedor y sumarlo a la lista de items
+		-comprar(id_producto, cantidad) : {precio_final, item_comprado: ItemProveedor, cantidad} | null (Devuelve null en caso de fallo)
+			Buscar item por id y checkear que exista
+			Calcular precio final
+			retornar un objeto de operacion con la sig forma: : {precio_final, item_comprado, cantidad}
+
+*/

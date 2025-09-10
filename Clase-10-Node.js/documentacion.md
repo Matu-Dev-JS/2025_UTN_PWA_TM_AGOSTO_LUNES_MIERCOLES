@@ -1,0 +1,6 @@
+- Toda app de node.js tiene un archivo `package.json` que contiene la información de la app.
+- `/src` es el directorio con todo el codigo de su programa
+- `node --watch` solo es estable en versiones > 20
+- Si estas en una version inferior a 20 te conviene instalar nodemon como devDependency, mediante el comando `npm i -D nodemon`
+- Las `devDependencies` son dependencias (codigo externo) que se instalaran solamente en entorno de desarrollo, cuando nuestra app sea desplegada y pase a estar en modo productivo NO SERAN instaladas
+- Para ejecutar nodemon debemos escribir el comando `nodemon ./src/main.js`

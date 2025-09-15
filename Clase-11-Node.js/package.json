@@ -14,5 +14,8 @@
   "description": "Intento de app con node.js",
   "devDependencies": {
     "nodemon": "^3.1.10"
+  },
+  "dependencies": {
+    "mongoose": "^8.18.1"
   }
 }

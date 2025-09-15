@@ -1,38 +1,21 @@
-import { sumar } from "./math.js";
-/* function ejecutarSuma (){
+import connectToMongoDB from "./config/configMongoDB.config.js";
+import User from "./models/User.model.js";
+
+connectToMongoDB()
+
+
+async function crearUsuario (name, email, password){
     try{
-        //Try intentara ejecutar este bloque de codigo
-        console.log(sumar(2))
+        await User.insertOne({
+            name: name,
+            email: email,
+            password: password
+        })
+        console.log('[SERVER]: usuario creado exitosamente')
     }
     catch(error){
-        //En caso de que el bloque falle
-        //catch atrapara el error y ejecutara su bloque de codigo
-        console.log("la operacion sumar ha fallado")
-        console.log('RAZON:', error)
-    }
-    finally{
-        //Finalmente, o independientemente de lo que pase ejecuta esto
-        console.log("Finalizo el intento de ejecucion de sumar")
-    }
-} */
-
-/* ejecutarSuma() */
-
-
-const manejarError = (accionCallback) =>{
-    try{
-        accionCallback()
-    }
-    catch(error){
-        if(error.status){
-            console.error('[CLIENT ERROR]: ' + error.message, 'Status: ' + error.status)
-        }
-        else{
-            console.error('[SERVER ERROR]: ' + error.message)
-        }
+        console.error('[SERVER ERROR]: no se pudo crear el usuario', error)
     }
 }
 
-manejarError(() =>{ sumar(2) })
-
-manejarError(() =>{ sakldhsudosadoas })
+crearUsuario('pepe', 'pepe@gmail.com', 'Pepe_123')

@@ -1,0 +1,21 @@
+{
+  "name": "clase-node",
+  "version": "2.0.0",
+  "main": "./src/main.js",
+  "scripts": {
+    "start": "node ./src/main.js",
+    "dev": "node --watch ./src/main.js",
+    "nodemon-dev": "nodemon ./src/main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "matu.dev",
+  "license": "ISC",
+  "type": "module",
+  "description": "Intento de app con node.js",
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "dependencies": {
+    "mongoose": "^8.18.1"
+  }
+}

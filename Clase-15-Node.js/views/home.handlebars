@@ -1,0 +1,15 @@
+<h1>Soy la vista home</h1>
+<h2>Usted es: {{username}}</h2>
+{{#if is_admin}}
+    <h3>Usted es admin</h3>
+{{else}}
+    <h3>Usted no es admin</h3>
+{{/if}}
+
+{{#each workspaces}}
+    <div>
+        <h3>{{this.name}}</h3>
+        <a href="">Ir a este workspace</a>
+        <hr>
+    </div>
+{{/each}}

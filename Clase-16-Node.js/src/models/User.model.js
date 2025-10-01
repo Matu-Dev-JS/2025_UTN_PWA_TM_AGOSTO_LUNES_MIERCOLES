@@ -29,6 +29,10 @@ const userSchema = new mongoose.Schema(
             type: Boolean,
             default: true,
             required: true
+        },
+        verified_email: {
+            type: Boolean,
+            default: false
         }
     }
 )

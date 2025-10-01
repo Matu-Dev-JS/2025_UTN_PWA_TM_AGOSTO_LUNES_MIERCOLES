@@ -4,7 +4,7 @@ class UserRepository {
 
     static async create(name, email, password) {
         try {
-            await User.insertOne({
+            return await User.insertOne({
                 name: name,
                 email: email,
                 password: password
@@ -56,7 +56,7 @@ class UserRepository {
     }
 
     static async updateById (user_id, update_user){
-        
+        console.log(user_id, update_user)
         await User.findByIdAndUpdate(
             user_id,
             update_user

@@ -13,4 +13,9 @@ authRouter.post(
     AuthController.register
 )
 
+authRouter.get(
+    '/verify-email/:verification_token',
+    AuthController.verifyEmail
+)
+
 export default authRouter

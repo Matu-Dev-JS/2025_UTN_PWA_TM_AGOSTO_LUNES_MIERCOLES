@@ -63,7 +63,7 @@ const RegisterScreen = () => {
                 />
             </div>
             <div className='form-field'>
-                <label htmlFor="">Contraseña:</label>
+                <label htmlFor="password">Contraseña:</label>
                 <input 
                     type="text" 
                     placeholder='pepe-123' 

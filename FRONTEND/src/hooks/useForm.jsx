@@ -1,3 +1,4 @@
+import { useState } from "react"
 
 //Tiene la responsabilidad de manejar el estado de formulario a lo largo de mi app
 const useForm = (initial_form_state, onSubmit) =>  {
@@ -26,6 +27,7 @@ const useForm = (initial_form_state, onSubmit) =>  {
     const handleSubmit = (event) => {
         //Evitamos que la pagina se recargue
         event.preventDefault()
+
         onSubmit(form_state)
         
     }

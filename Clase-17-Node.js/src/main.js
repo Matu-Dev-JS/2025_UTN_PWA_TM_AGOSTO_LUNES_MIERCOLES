@@ -6,11 +6,15 @@ import authRouter from "./routes/auth.router.js";
 import workspaceRouter from "./routes/workspace.router.js";
 import randomMiddleware from "./middlewares/random.middleware.js";
 import mailTransporter from "./config/mailTransporter.config.js";
+import cors from 'cors'
 
 
 connectToMongoDB()
 
 const app = express()
+
+//Configuro a mi API como API publica, cualquier dominio puede hacer peticiones
+app.use( cors() )
 
 
 app.use(express.json())

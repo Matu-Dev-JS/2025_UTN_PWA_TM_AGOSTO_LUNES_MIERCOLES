@@ -8,6 +8,8 @@ import jwt from 'jsonwebtoken'
 
 class AuthService {
     static async register(email, password, name){
+
+        console.log(email, name, password)
         const user = await UserRepository.getByEmail(email)
         
         if(user){

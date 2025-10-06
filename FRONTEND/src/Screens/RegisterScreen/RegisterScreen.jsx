@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import useForm from '../../hooks/useForm'
+import { register } from '../../services/authService'
 
 const RegisterScreen = () => {
 
@@ -33,7 +34,7 @@ const RegisterScreen = () => {
         initial_form_state, 
         onRegister
     )
-    
+    //register('pepe', 'mati.dev.gimenez@gmail.com', 'Mati_123')
     
 
   return (

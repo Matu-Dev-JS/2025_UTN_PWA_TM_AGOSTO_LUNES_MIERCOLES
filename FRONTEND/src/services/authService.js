@@ -7,7 +7,7 @@ export async function register (username, email, password){
 
 
     //Fetch es una funcion nativa de JS para hacer consultas HTTP
-    await fetch(
+    const response = await fetch(
         'http://localhost:8080/api/auth/register',
         {
             method: 'POST',

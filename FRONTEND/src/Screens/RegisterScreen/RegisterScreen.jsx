@@ -18,10 +18,35 @@ const RegisterScreen = () => {
         [REGISTER_FORM_FIELDS.PASSWORD]: ''
     }
 
-    const onRegister = (form_state_sent) => {
-        //Logica de registro
-        console.log('el usuario a registrar es:', form_state_sent)
-        resetForm()
+    //Estados para manejar una consulta al servidor
+    const [response, setResponse] = useState(null)
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(null)
+
+    //Logica de registro
+    const onRegister = async (form_state_sent) => {
+        setResponse(null)
+        setError(null)
+        setLoading(true)
+        try{
+            const response = await register(
+                form_state_sent[REGISTER_FORM_FIELDS.USERNAME], 
+                form_state_sent[REGISTER_FORM_FIELDS.EMAIL], 
+                form_state_sent[REGISTER_FORM_FIELDS.PASSWORD]
+            )
+            if(!response.ok){
+                throw new Error(response.message || 'Error desconocido')
+            }
+            setResponse(response)
+            resetForm()
+        }
+        catch(error){
+            setError(error.message)
+        }
+        finally{
+            setLoading(false)
+        }
+        
     }
 
     //Alternativa, usar react hook forms / React formik
@@ -34,9 +59,9 @@ const RegisterScreen = () => {
         initial_form_state, 
         onRegister
     )
-    //register('pepe', 'mati.dev.gimenez@gmail.com', 'Mati_123')
     
-
+    
+    console.log(response)
   return (
     <div>
         <h1>Registrate</h1>
@@ -74,7 +99,14 @@ const RegisterScreen = () => {
                     id={'password'}
                 />
             </div>
-            <button>Registrarse</button>
+            {error && <span style={{color: 'red'}}> {error} </span>}
+            {response && <span style={{color: 'green'}}> Usuario registrado con exito! </span>}
+            {
+                loading 
+                ? <button disabled>Registrando</button>
+                : <button>Registrarse</button>
+            }
+            
         </form>
     </div>
   )

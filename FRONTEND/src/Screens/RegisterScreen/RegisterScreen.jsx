@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import useForm from '../../hooks/useForm'
 import { register } from '../../services/authService'
+import useFetch from '../../hooks/useFetch'
+
+
 
 const RegisterScreen = () => {
 
@@ -19,36 +22,21 @@ const RegisterScreen = () => {
     }
 
     //Estados para manejar una consulta al servidor
-    const [response, setResponse] = useState(null)
-    const [loading, setLoading] = useState(false)
-    const [error, setError] = useState(null)
+    const {response, error, loading, sendRequest} = useFetch()
 
-    //Logica de registro
-    const onRegister = async (form_state_sent) => {
-        setResponse(null)
-        setError(null)
-        setLoading(true)
-        try{
-            const response = await register(
-                form_state_sent[REGISTER_FORM_FIELDS.USERNAME], 
-                form_state_sent[REGISTER_FORM_FIELDS.EMAIL], 
-                form_state_sent[REGISTER_FORM_FIELDS.PASSWORD]
-            )
-            if(!response.ok){
-                throw new Error(response.message || 'Error desconocido')
+    function onRegister (form_state_sent) {
+        sendRequest(
+            () => {
+                return register(
+                    form_state_sent[REGISTER_FORM_FIELDS.USERNAME], 
+                    form_state_sent[REGISTER_FORM_FIELDS.EMAIL], 
+                    form_state_sent[REGISTER_FORM_FIELDS.PASSWORD]
+                )
             }
-            setResponse(response)
-            resetForm()
-        }
-        catch(error){
-            setError(error.message)
-        }
-        finally{
-            setLoading(false)
-        }
-        
+        )
     }
 
+    
     //Alternativa, usar react hook forms / React formik
     const {
         form_state, 
@@ -61,7 +49,6 @@ const RegisterScreen = () => {
     )
     
     
-    console.log(response)
   return (
     <div>
         <h1>Registrate</h1>

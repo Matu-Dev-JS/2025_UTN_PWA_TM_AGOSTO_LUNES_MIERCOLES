@@ -1,3 +1,4 @@
+import ENVIRONMENT from "../config/environment.config.js";
 import { ServerError } from "../error.js";
 import AuthService from "../services/auth.service.js";
 
@@ -40,16 +41,51 @@ class AuthController {
             const {verification_token} = request.params
 
             await AuthService.verifyEmail(verification_token)
+            response.redirect(
+                ENVIRONMENT.URL_FRONTEND + '/login?from=verified_email'
+            )
+        }
+        catch(error){
 
-            response.json({
-                ok: true, 
-                message: 'Usuario verificado exitosamente',
-                status: 200
-            })
+            //TODO: Si hay algun fallo reenviar el mail de validacion
+            if(error.status){
+                response.send(
+                    `<h1>${error.message}</h1>`
+                )
+            }
+            else{
+                console.error(
+                    'ERROR AL REGISTRAR', error
+                )
+
+                response.send(
+                    `<h1>Error en el servidor, intentelo mas tarde</h1>`
+                )
+            }
+        }
+    }
+
+    static async login (request, response){
+        try{
+            const {email, password} = request.body
+
+            const { auth_token } = await AuthService.login(email, password)
+
+            response.json(
+                {
+                    ok: true, 
+                    message: 'Usuario logueado con exito',
+                    status: 200,
+                    body: {
+                        auth_token
+                    }
+                }
+            )
+            return 
         }
         catch(error){
             if(error.status){
-                response.send({
+                return response.send({
                     ok:false,
                     message: error.message,
                     status: error.status
@@ -59,7 +95,7 @@ class AuthController {
                 console.error(
                     'ERROR AL REGISTRAR', error
                 )
-                response.send({
+                return response.send({
                     ok: false,
                     message: 'Error interno del servidor',
                     status: 500

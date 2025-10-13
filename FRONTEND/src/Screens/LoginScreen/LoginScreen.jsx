@@ -1,12 +1,14 @@
-import React, { useEffect } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import { login } from '../../services/authService'
 import useForm from '../../hooks/useForm'
 import useFetch from '../../hooks/useFetch'
+import { AuthContext } from '../../Context/AuthContext'
 
 const LoginScreen = () => {
   const navigate = useNavigate()
   const location = useLocation()
+  const {onLogin} = useContext(AuthContext)
   useEffect(
     () => {
       const query = new URLSearchParams(location.search)
@@ -31,7 +33,7 @@ const LoginScreen = () => {
 
     const { response, error, loading, sendRequest, resetResponse } = useFetch()
 
-    function onLogin(form_state_sent) {
+    function handleLogin(form_state_sent) {
         resetResponse()
         sendRequest(
             () => {
@@ -48,14 +50,15 @@ const LoginScreen = () => {
         onInputChange,
         handleSubmit,
         resetForm
-    } = useForm(initial_form_state, onLogin)
+    } = useForm(initial_form_state, handleLogin)
 
     useEffect(
         () => {
           if(response && response.ok){
             //Queremos que persista en memoria el auth token
-            localStorage.setItem('auth_token', response.body.auth_token)
-            navigate('/home')
+            //Dejamos que el context se encargue de que sucedera
+            onLogin(response.body.auth_token)
+            
           }
         },
         [response]

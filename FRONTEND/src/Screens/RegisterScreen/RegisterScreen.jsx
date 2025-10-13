@@ -25,6 +25,7 @@ const RegisterScreen = () => {
     const {response, error, loading, sendRequest} = useFetch()
 
     function onRegister (form_state_sent) {
+
         sendRequest(
             () => {
                 return register(

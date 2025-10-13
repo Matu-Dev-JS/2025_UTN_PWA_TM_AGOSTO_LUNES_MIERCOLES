@@ -23,11 +23,16 @@ const useFetch = () => {
         }
     }
 
+    function resetResponse () {
+        setResponse(null)
+    }
+
     return {
         response,
         loading,
         error,
-        sendRequest
+        sendRequest,
+        resetResponse
     }
 }
 

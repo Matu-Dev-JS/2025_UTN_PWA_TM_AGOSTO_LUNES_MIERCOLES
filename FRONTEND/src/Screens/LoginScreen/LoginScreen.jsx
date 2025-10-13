@@ -6,12 +6,18 @@ import useFetch from '../../hooks/useFetch'
 
 const LoginScreen = () => {
   const navigate = useNavigate()
-  //Si venimos de verificar el mail, mostrar la alerta de verificado
-  const query = new URLSearchParams(useLocation().search)
-  const from = query.get('from')
-  if (from === 'verified_email') {
-    alert('Has validado tu mail exitosamente')
-  }
+  const location = useLocation()
+  useEffect(
+    () => {
+      const query = new URLSearchParams(location.search)
+      const from = query.get('from')
+      if (from === 'verified_email') {
+        alert('Has validado tu mail exitosamente')
+      }
+    },
+    [] //Solo queremos que se ejecute cuando se monte el componente
+  )
+  
 
   const LOGIN_FORM_FIELDS = {
         EMAIL: 'email',
